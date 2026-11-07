@@ -51,8 +51,12 @@ namespace StarterAssets
 		[Tooltip("How far in degrees can you move the camera down")]
 		public float BottomClamp = -90.0f;
 
-		// cinemachine
-		private float _cinemachineTargetPitch;
+		[Header("Shooting")]
+		public GameObject bulletPrefab;
+		public float bulletImpulse;
+
+        // cinemachine
+        private float _cinemachineTargetPitch;
 
 		// player
 		private float _speed;
@@ -71,6 +75,8 @@ namespace StarterAssets
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
+
+		private Transform gun;
 
 		private const float _threshold = 0.01f;
 
@@ -101,6 +107,7 @@ namespace StarterAssets
 			_input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM
 			_playerInput = GetComponent<PlayerInput>();
+			gun = GameObject.FindGameObjectWithTag("Gun").transform;
 #else
 			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
@@ -115,11 +122,24 @@ namespace StarterAssets
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
+			MyInputs();
 		}
 
 		private void LateUpdate()
 		{
 			CameraRotation();
+		}
+
+		private void MyInputs()
+		{
+			if (_input.shoot)
+			{
+				GameObject newBullet = Instantiate(bulletPrefab, gun.position, Quaternion.identity);
+				newBullet.GetComponent<Rigidbody>().AddForce(gun.forward * bulletImpulse, ForceMode.Impulse);
+				Destroy(newBullet, 5f);
+				_input.shoot = false;
+				Debug.Log("quierodormir");
+            }
 		}
 
 		private void GroundedCheck()
