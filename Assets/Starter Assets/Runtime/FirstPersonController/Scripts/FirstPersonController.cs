@@ -138,7 +138,6 @@ namespace StarterAssets
 				newBullet.GetComponent<Rigidbody>().AddForce(gun.forward * bulletImpulse, ForceMode.Impulse);
 				Destroy(newBullet, 5f);
 				_input.shoot = false;
-				Debug.Log("quierodormir");
             }
 		}
 

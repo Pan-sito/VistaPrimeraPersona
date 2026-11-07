@@ -12,6 +12,8 @@ public class Enemy : MonoBehaviour
 
     public Image healthBar;
 
+    public float damage;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -34,6 +36,7 @@ public class Enemy : MonoBehaviour
         healthBar.fillAmount = health / maxHealth;
         if(health <= 0)
         {
+            Victory.instance.enemysDefeated += 1;
             Destroy(gameObject);
         }
     }
