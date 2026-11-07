@@ -1,0 +1,4 @@
+repository "VistaPrimeraPersona 2026-11-06_23-47-55/VistaPrimeraPersona@4674148813587@cloud"
+  path "/"
+    br "/main"
+    co "/main"
