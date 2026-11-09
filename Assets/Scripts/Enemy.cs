@@ -46,6 +46,7 @@ public class Enemy : MonoBehaviour
         {
             GetComponent<CapsuleCollider>().enabled = false;
             animator.SetTrigger("Death");
+            agent.isStopped = true;
             Destroy(gameObject, 5f);
         }
     }
