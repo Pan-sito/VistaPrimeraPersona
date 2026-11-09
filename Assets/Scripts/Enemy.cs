@@ -14,11 +14,14 @@ public class Enemy : MonoBehaviour
 
     public float damage;
 
+    private Animator animator;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         InvokeRepeating("FollowPlayer", 1f, 0.5f);
         maxHealth = health;
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -29,6 +32,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        Victory.instance.enemysDefeated += 1;
+    }
+
     private void TakeDamage(Collision collision)
     {
         health -= 25;
@@ -36,18 +44,14 @@ public class Enemy : MonoBehaviour
         healthBar.fillAmount = health / maxHealth;
         if(health <= 0)
         {
-            Victory.instance.enemysDefeated += 1;
-            Destroy(gameObject);
+            GetComponent<CapsuleCollider>().enabled = false;
+            animator.SetTrigger("Death");
+            Destroy(gameObject, 5f);
         }
     }
 
     private void FollowPlayer()
     {
         agent.destination = GameObject.FindGameObjectWithTag("Player").transform.position;      
-    }
-
-    void Update()
-    {
-        
     }
 }
